@@ -4,6 +4,7 @@ namespace MathGame.Models;
 
 internal class GameEngine
 {
+    string[] operators = new string[] { "+", "-", "*", "/" };
     List<GameData> gameHistory = new List<GameData>();
     int difficulty = 1;
 
@@ -116,7 +117,7 @@ internal class GameEngine
             return new Question(equation, "", expectedAnswer);
         }
 
-        else if (new string[] { "+", "-", "*" }.Contains(op)) // Perhaps make this list of operators static and outside of the method?
+        else if (new string[] { "+", "-", "*" }.Contains(op))
         {
             int num1 = random.Next(1, 10 * difficultyLevel);
             int num2 = random.Next(1, 10 * difficultyLevel);
@@ -143,19 +144,7 @@ internal class GameEngine
     // Pick a random operator for the question, to help randomize the questions a bit more.
     private string GetOperator(Random random)
     {
-        int val = random.Next(1, 5); // 5 is a bit magical, perhaps make this a static list of operators and pick a random index from it instead?
-        switch (val)
-        {
-            case 1:
-                return "+";
-            case 2:
-                return "-";
-            case 3:
-                return "*";
-            case 4:
-                return "/";
-            default:
-                return "+";
-        }
+        int val = random.Next(0, operators.Length);
+        return operators[val];
     }
 }

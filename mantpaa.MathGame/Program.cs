@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using MathGame.Models;
+﻿using MathGame.Models;
 
 namespace MathGame;
 
@@ -42,10 +41,4 @@ public static class MathGame
             }
         } while (input != "exit");
     }
-
-
-
-
-
-
 }

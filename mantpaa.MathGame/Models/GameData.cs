@@ -6,6 +6,7 @@ internal class GameData
     private double avgTimePerQuestion;
     private int difficultyLevel;
     private Question[] questions;
+
     public GameData(int score, int difficultyLevel, Question[] questions)
     {
         this.score = score;
@@ -33,7 +34,7 @@ internal class GameData
         int questionsAnswered = 0;
         foreach (var question in questions)
         {
-            if (question.TimeSpentSeconds >= 0) // perhaps make this a nullable int instead, to avoid the magic number of -1?
+            if (question.TimeSpentSeconds >= 0)
             {
                 totalTime += question.TimeSpentSeconds;
                 questionsAnswered++;
