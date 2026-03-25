@@ -11,7 +11,13 @@ public static class MathGame
         string input = "";
         do
         {
-            Console.WriteLine("Math game!\nPress the number to choose a menu option.\n1. Play game\n2. See history.\n3. Change difficulty(1-3).\nExit to exit.");
+            Console.WriteLine("Math game!\n" +
+                "Press the number to choose a menu option.\n"+
+                "1. Play game\n"+
+                "2. See history.\n"+
+                "3. Change difficulty(1-3).\n"+
+                "4. Change question type\n"
+                +"Exit to exit.");
             string? userInput = Console.ReadLine();
 
             if (userInput != null)
@@ -27,6 +33,9 @@ public static class MathGame
                         break;
                     case "3":
                         gameEngine.ChangeDifficulty();
+                        break;
+                    case "4":
+                        gameEngine.ChangeQuestionType();
                         break;
                     case "exit":
                         Console.WriteLine("Exiting the game. Goodbye!");

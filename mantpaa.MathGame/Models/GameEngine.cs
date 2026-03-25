@@ -7,16 +7,19 @@ internal class GameEngine
     string[] operators = new string[] { "+", "-", "*", "/" };
     List<GameData> gameHistory = new List<GameData>();
     int difficulty = 1;
+    GameType gameType = GameType.Addition;
 
     public void PlayGame()
     {
         GameData gameData;
-        Question[] questions = InitializeGame(difficulty);
+        
         int score = 0;
 
 
         Console.WriteLine("Starting the game! Answer the following questions:");
         Console.WriteLine("To give up, type 'exit'.");
+        
+        Question[] questions = InitializeGame(difficulty);
         for (int i = 0; i < questions.Length; i++)
         {
             Stopwatch stopwatch = new Stopwatch();
@@ -80,15 +83,56 @@ internal class GameEngine
 
         difficulty = int.Parse(input);
     }
+    public void ChangeQuestionType()
+    {
+        string? input;
+        Console.WriteLine("Enter question type:\na - addition\ns - subtraction\nm - multiplication\nd - division\nr - random!");
+        input = Console.ReadLine();
 
+        while (input == null || !new string[] { "a", "s", "m", "d", "r" }.Contains(input.ToLower()))
+        {
+            Console.WriteLine("Invalid input, try again.");
+            input = Console.ReadLine();
+        }
+       
+        switch (input.ToLower()) 
+        {
+            case "a":
+                gameType = GameType.Addition;
+                break;
+            case "s":
+                gameType = GameType.Subtraction;
+                break;
+            case "m":
+                gameType = GameType.Multiplication;
+                break;
+            case "d":
+                gameType = GameType.Division;
+                break;
+            case "r":
+                gameType = GameType.Random;
+                break;
+        }
+    }
     private Question[] InitializeGame(int difficultyLevel)
     {
         Random random = new Random();
+        string[] operatorValue = new string[] { "+", "-", "*", "/" }; // 0:+, 1: -, 2: *, 3: / : GameType enum values correspond to these indices.
         int questionsToAsk = 5;
         Question[] questions = new Question[questionsToAsk];
         for (int i = 0; i < questionsToAsk; i++)
         {
-            string op = GetOperator(random);
+            string op = "+";
+
+            if (gameType == GameType.Random)
+            {
+                op = GetOperator(random);
+            }
+            else
+            {
+                op = operatorValue[(int) gameType];
+            }
+
             questions[i] = CreateQuestion(op, difficultyLevel, random);
         }
 
@@ -105,7 +149,8 @@ internal class GameEngine
             while (valid == false)
             {
                 dividend = random.Next(0, 101);
-                divisor = random.Next(1, dividend);
+                int minValue = (difficultyLevel > 1) ? 2 : 1; // disallow division by 1 for higher difficulties.
+                divisor =  random.Next(minValue, (dividend > minValue) ? dividend : minValue +1); // Ensure maxval is larger than minval
                 if (dividend % divisor == 0)
                 {
                     valid = true;
@@ -117,7 +162,7 @@ internal class GameEngine
             return new Question(equation, "", expectedAnswer);
         }
 
-        else if (new string[] { "+", "-", "*" }.Contains(op))
+        else if (new string[] {"+", "*", "-" }.Contains(op))
         {
             int num1 = random.Next(1, 10 * difficultyLevel);
             int num2 = random.Next(1, 10 * difficultyLevel);
@@ -146,5 +191,14 @@ internal class GameEngine
     {
         int val = random.Next(0, operators.Length);
         return operators[val];
+    }
+
+    enum GameType
+    {
+        Addition,
+        Subtraction,
+        Multiplication,
+        Division,
+        Random
     }
 }
